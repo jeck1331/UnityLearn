@@ -2,34 +2,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float horizontalInput;
-
-    private float speed = 20.0f;
-    private float xRange = 20.0f;
-
-    public GameObject projectablePrefab;
+    private Rigidbody playerRb;
+    public float jumpForce = 10.0f;
+    public bool isGrounded = true;
     void Start()
     {
-        
+        playerRb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (transform.position.x < -xRange)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
+            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
         }
-        if (transform.position.x > xRange)
-        {
-            transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
-        }
-        horizontalInput = Input.GetAxis("Horizontal");
-        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Instantiate(projectablePrefab, transform.position, projectablePrefab.transform.rotation);
-        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        isGrounded = true;
     }
 }

@@ -1,30 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject[] animalPrefabs;
-
-    private float spawnRangeX = 20;
-    private float spawnPosZ = 20;
-
-    private float startDelay = 2f;
-    private float spwanInterval = 1.5f;
-    //public GameObject[] foodPrefabs;
-    // Start is called before the first frame update
+    public GameObject obstaclePrefab;
+    private Vector3 spawnPos = new Vector3(25, 0, 0);
+    private float delayTime = 1f;
     void Start()
     {
-        InvokeRepeating("SpawnRandomAnimal", startDelay, spwanInterval);
+        Invoke("SpawnObstacle", delayTime);
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //}
 
-    private void SpawnRandomAnimal()
+    void SpawnObstacle()
     {
-        Vector3 spawnPos = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0, spawnPosZ);
-        int animalIndex = Random.Range(0, animalPrefabs.Length);
-        Instantiate(animalPrefabs[animalIndex], spawnPos, animalPrefabs[animalIndex].transform.rotation);
+        Instantiate(obstaclePrefab, spawnPos, obstaclePrefab.transform.rotation);
+
+        Invoke("SpawnObstacle", Random.Range(2, 7));
     }
 }
